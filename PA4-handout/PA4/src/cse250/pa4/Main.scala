@@ -1,0 +1,36 @@
+package cse250.pa4
+
+import scala.util.hashing.Hashing
+
+object Main {
+  def main(args: Array[String]): Unit = {
+    val testSize = 10
+
+    val inputKeys = Array.tabulate(testSize)(i => i + 1)
+    val inputValues = Array.tabulate(testSize)(i => i.toString * i)
+
+//    val treeMap = new AVLTreeMap[Int, String]
+    val hashMap = new HashTableMap[Int, String](1.0)(MyHasher)
+    for (elem <- inputKeys.zip(inputValues)) {
+//      treeMap.addOne(elem)
+      hashMap.addOne(elem)
+    }
+
+//    println(treeMap.iterator.mkString("AVLTreeMap(", ",", ")"))
+    println(hashMap.iterator.mkString("HashTableMap(", ",", ")"))
+
+    for (elem <- inputKeys.zip(inputValues)) {
+      assert(hashMap.removeOne(elem._1) == true)
+//      assert(treeMap.removeOne(elem._1) == true)
+    }
+    assert(hashMap.iterator.hasNext == false)
+//    assert(treeMap.iterator.hasNext == false)
+
+}
+
+
+}
+
+object MyHasher extends Hashing[Int] {
+  override def hash(x: Int): Int = 3 * x * x + 2 * x + 5
+}
